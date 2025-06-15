@@ -1,10 +1,16 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowDown, Download, Eye, X } from "lucide-react";
+
+// Type declaration for html2pdf
+declare global {
+  interface Window {
+    html2pdf: any;
+  }
+}
 
 // Sample report data
 const analysisReports = [
@@ -121,7 +127,7 @@ const analysisReports = [
           <h2 class="text-2xl font-semibold">Market Opportunity</h2>
           <p>Total addressable market of $180B in payment processing, growing at 12% annually. PayStream's current market share of 3% leaves significant room for expansion.</p>
           
-          <h2 class="text-2xl font-semibold">Recommendation</h2>
+          <h2 class="text-2xl font-semibond">Recommendation</h2>
           <p>Exceptional growth trajectory with strong fundamentals. <strong>STRONG BUY</strong> with price target of $128 per share.</p>
         </div>
       </div>
@@ -130,7 +136,7 @@ const analysisReports = [
 ];
 
 const Index = () => {
-  const [selectedReport, setSelectedReport] = useState(null);
+  const [selectedReport, setSelectedReport] = useState<typeof analysisReports[0] | null>(null);
   const [showContact, setShowContact] = useState(false);
 
   const scrollToReports = () => {
@@ -139,11 +145,11 @@ const Index = () => {
     });
   };
 
-  const handlePreview = (report) => {
+  const handlePreview = (report: typeof analysisReports[0]) => {
     setSelectedReport(report);
   };
 
-  const handleDownloadPDF = async (report) => {
+  const handleDownloadPDF = async (report: typeof analysisReports[0]) => {
     // Create a temporary div with the report content
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = `
