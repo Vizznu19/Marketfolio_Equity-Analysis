@@ -1118,6 +1118,8 @@ const analysisReports = [
 const Index = () => {
   const [selectedReport, setSelectedReport] = useState<typeof analysisReports[0] | null>(null);
   const [showContact, setShowContact] = useState(false);
+  const [requestedStock, setRequestedStock] = useState("");
+  const [showRequestMsg, setShowRequestMsg] = useState(false);
 
   const scrollToReports = () => {
     document.getElementById('reports-section')?.scrollIntoView({ 
@@ -1259,18 +1261,18 @@ const Index = () => {
       <AnimatedMarketBackground />
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0a0a0a]/90 border-b border-gray-800">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold text-white">
+        <div className="container mx-auto px-3 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+          <div className="text-xl sm:text-2xl font-bold text-white">
             Marketfolio
           </div>
-          <nav className="flex items-center space-x-6">
-            <a href="#reports-section" onClick={scrollToReports} className="text-gray-300 hover:text-white transition-colors cursor-pointer">
+          <nav className="flex items-center space-x-3 sm:space-x-6">
+            <a href="#reports-section" onClick={scrollToReports} className="text-gray-300 hover:text-white transition-colors cursor-pointer text-sm sm:text-base">
               Analysis
             </a>
             <Button 
               onClick={() => setShowContact(true)}
               variant="outline" 
-              className="border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white"
+              className="border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base"
             >
               Contact
             </Button>
@@ -1279,19 +1281,19 @@ const Index = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-32 px-6 text-center">
-        <div className="container mx-auto max-w-4xl">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight">
+      <section className="relative py-20 sm:py-32 px-3 sm:px-6 text-center">
+        <div className="container mx-auto max-w-xl sm:max-w-4xl">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 text-white leading-tight">
             Clarity in Complexity.<br />
             <span className="text-blue-400">Elite Equity Analysis.</span>
           </h1>
-          <p className="text-xl md:text-2xl mb-12 text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl md:text-2xl mb-8 sm:mb-12 text-gray-300 max-w-xs sm:max-w-2xl mx-auto leading-relaxed">
             In-depth, data-driven research reports to inform your investment strategy.
           </p>
           <Button 
             onClick={scrollToReports}
             size="lg" 
-            className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 text-lg font-medium transition-all duration-300 hover:scale-105"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium transition-all duration-300 hover:scale-105"
           >
             View Research
             <ArrowDown className="ml-2 h-5 w-5" />
@@ -1300,38 +1302,38 @@ const Index = () => {
       </section>
 
       {/* Analysis Reports Section */}
-      <section id="reports-section" className="py-20 px-6">
-        <div className="container mx-auto max-w-6xl">
-          <h2 className="text-4xl font-bold mb-12 text-center text-white">
+      <section id="reports-section" className="py-10 sm:py-20 px-2 sm:px-6">
+        <div className="container mx-auto max-w-2xl sm:max-w-6xl">
+          <h2 className="text-2xl sm:text-4xl font-bold mb-8 sm:mb-12 text-center text-white">
             Latest Analysis
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {analysisReports.map((report) => (
               <Card key={report.id} className="bg-gray-900/50 border-gray-800 hover:border-gray-700 transition-all duration-300 hover:transform hover:scale-[1.02]">
                 <CardHeader>
-                  <CardTitle className="text-white text-xl mb-2">
+                  <CardTitle className="text-white text-lg sm:text-xl mb-2">
                     {report.title}
                   </CardTitle>
-                  <CardDescription className="text-gray-400 text-sm mb-4">
+                  <CardDescription className="text-gray-400 text-xs sm:text-sm mb-4">
                     {report.date}
                   </CardDescription>
-                  <p className="text-gray-300 leading-relaxed">
+                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
                     {report.synopsis}
                   </p>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <div className="flex space-x-3">
+                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                     <Button 
                       onClick={() => handlePreview(report)}
                       variant="outline" 
-                      className="flex-1 border-black text-black hover:bg-black hover:text-white"
+                      className="flex-1 border-black text-black hover:bg-black hover:text-white text-sm sm:text-base"
                     >
                       <Eye className="mr-2 h-4 w-4" />
                       Preview
                     </Button>
                     <Button 
                       onClick={() => handleDownloadPDF(report)}
-                      className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
+                      className="flex-1 bg-blue-500 hover:bg-blue-600 text-white text-sm sm:text-base"
                     >
                       <Download className="mr-2 h-4 w-4" />
                       Download PDF
@@ -1341,13 +1343,25 @@ const Index = () => {
               </Card>
             ))}
           </div>
+          {/* Stock Request Section */}
+          <div className="mt-12 sm:mt-16 flex flex-col items-center">
+            <h3 className="text-lg sm:text-2xl font-semibold text-white mb-3 sm:mb-4 text-center">Request Research on a Stock</h3>
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSeNKKM_BJLNj32jvf4GS_2tvxr8H6UZbuR2gJ1HcMyG2ita0g/viewform?usp=header"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 sm:px-8 py-2 sm:py-3 rounded bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-all text-base sm:text-lg"
+            >
+              Submit Form
+            </a>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-gray-800">
+      <footer className="py-6 sm:py-8 px-2 sm:px-6 border-t border-gray-800">
         <div className="container mx-auto text-center">
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-xs sm:text-base">
             © 2025 Marketfolio. All Rights Reserved.
           </p>
         </div>
