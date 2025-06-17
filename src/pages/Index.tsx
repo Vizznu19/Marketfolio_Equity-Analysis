@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowDown, Download, Eye, X } from "lucide-react";
+import AnimatedMarketBackground from "./AnimatedMarketBackground";
 
 // Type declaration for html2pdf
 declare global {
@@ -1254,7 +1255,8 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-gray-100">
+    <div className="min-h-screen text-gray-100">
+      <AnimatedMarketBackground />
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0a0a0a]/90 border-b border-gray-800">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -1381,17 +1383,19 @@ const Index = () => {
           <div className="space-y-4">
             <div>
               <h3 className="font-semibold text-gray-300 mb-2">Email</h3>
-              <p className="text-blue-400">contact@boltai.example.com</p>
+              <a href="mailto:vynew.2021@gmail.com" className="text-blue-400 hover:text-blue-300 transition-colors">
+                vynew.2021@gmail.com
+              </a>
             </div>
             <div>
               <h3 className="font-semibold text-gray-300 mb-2">LinkedIn</h3>
               <a 
-                href="https://linkedin.com/in/yourprofile" 
+                href="https://www.linkedin.com/in/vishnu2004" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:text-blue-300 transition-colors"
               >
-                linkedin.com/in/yourprofile
+                linkedin.com/in/vishnu2004
               </a>
             </div>
           </div>
