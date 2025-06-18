@@ -19,7 +19,7 @@ const analysisReports = [
     id: 1,
     title: "Power Grid Corporation of India",
     date: "June 15, 2025",
-    synopsis: "Comprehensive analysis of TechCorp's quarterly performance showing strong growth in cloud services and AI initiatives.",
+    synopsis: "Comprehensive evaluation of Power Grid Corporation of India's transmission infrastructure leadership and financial stability in the power sector.",
     content: `
       <!DOCTYPE html>
 <html lang="en">
@@ -294,7 +294,7 @@ const analysisReports = [
     id: 2,
     title: "NBCC",
     date: "June 15, 2025",
-    synopsis: "In-depth analysis of MediLife's pharmaceutical pipeline and market positioning in the evolving healthcare landscape.",
+    synopsis: "In-depth assessment of NBCC (India) Ltd's infrastructure project execution strengths and diversified revenue streams in construction and real estate.",
     content: `
       <!DOCTYPE html>
 <html lang="en">
@@ -569,7 +569,7 @@ const analysisReports = [
     id: 3,
     title: "SAIL",
     date: "June 15, 2025",
-    synopsis: "Strategic analysis of GreenPower's position in the renewable energy market and growth opportunities.",
+    synopsis: "In-depth evaluation of SAIL's steel manufacturing prowess and market adaptability in the metals industry.",
     content: `
       <!DOCTYPE html>
 <html lang="en">
@@ -843,7 +843,7 @@ const analysisReports = [
     id: 4,
     title: "NTPC",
     date: "June 15, 2025",
-    synopsis: "Comprehensive review of PayStream's payment processing technology and competitive advantages in digital finance.",
+    synopsis: "Comprehensive analysis of NTPC's renewable energy initiatives and financial performance in the power sector.",
     content: `
       <!DOCTYPE html>
 <html lang="en">
