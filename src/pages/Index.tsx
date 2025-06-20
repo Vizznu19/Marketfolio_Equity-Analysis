@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowDown, Download, Eye, X } from "lucide-react";
 import AnimatedMarketBackground from "./AnimatedMarketBackground";
+import { Link } from 'react-router-dom';
 
 // Type declaration for html2pdf
 declare global {
@@ -1120,6 +1121,8 @@ const Index = () => {
   const [showContact, setShowContact] = useState(false);
   const [requestedStock, setRequestedStock] = useState("");
   const [showRequestMsg, setShowRequestMsg] = useState(false);
+  const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
+  const toolsDropdownRef = useRef<HTMLDivElement>(null);
 
   const scrollToReports = () => {
     document.getElementById('reports-section')?.scrollIntoView({ 
@@ -1256,6 +1259,21 @@ const Index = () => {
     }
   };
 
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (toolsDropdownRef.current && !toolsDropdownRef.current.contains(event.target as Node)) {
+        setToolsDropdownOpen(false);
+      }
+    }
+    if (toolsDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [toolsDropdownOpen]);
+
   return (
     <div className="min-h-screen text-gray-100">
       <AnimatedMarketBackground />
@@ -1263,25 +1281,55 @@ const Index = () => {
       <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0a0a0a]/90 border-b border-gray-800">
         <div className="container mx-auto px-3 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
           <div className="text-xl sm:text-2xl font-bold text-white">
-            Marketfolio
+            <Link to="/" className="hover:text-blue-400 transition-colors">Marketfolio</Link>
           </div>
           <nav className="flex items-center space-x-3 sm:space-x-6">
-            <a href="#reports-section" onClick={scrollToReports} className="text-gray-300 hover:text-white transition-colors cursor-pointer text-sm sm:text-base">
+            <a href="#reports-section" onClick={scrollToReports} className="text-gray-300 hover:text-white transition-colors cursor-pointer text-sm sm:text-base px-4 py-2 rounded-md">
               Analysis
             </a>
-            <Button 
-              onClick={() => setShowContact(true)}
-              variant="outline" 
-              className="border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base"
+            <div
+              className="relative"
+              ref={toolsDropdownRef}
+              onMouseEnter={() => setToolsDropdownOpen(true)}
+              onMouseLeave={() => setToolsDropdownOpen(false)}
+            >
+              <button
+                className="text-gray-300 hover:text-white transition-colors cursor-pointer text-sm sm:text-base px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                tabIndex={0}
+                type="button"
+              >
+                Tools
+              </button>
+              {toolsDropdownOpen && (
+                <div className="absolute left-0 mt-2 w-36 bg-gray-900 border border-gray-700 rounded-md shadow-lg z-50">
+                  <Link
+                    to="/screener"
+                    className="block px-4 py-2 text-gray-300 hover:bg-blue-500 hover:text-white rounded-md transition-colors text-sm"
+                  >
+                    Screener
+                  </Link>
+                  <Link
+                    to="/news"
+                    className="block px-4 py-2 text-gray-300 hover:bg-blue-500 hover:text-white rounded-md transition-colors text-sm"
+                  >
+                    News
+                  </Link>
+                </div>
+              )}
+            </div>
+            <a
+              href="#contact-section"
+              onClick={e => { e.preventDefault(); setShowContact(true); }}
+              className="text-gray-300 hover:text-white transition-colors cursor-pointer text-sm sm:text-base px-4 py-2 rounded-md"
             >
               Contact
-            </Button>
+            </a>
           </nav>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-20 sm:py-32 px-3 sm:px-6 text-center">
+      <section className="relative py-2 sm:py-6 px-3 sm:px-6 text-center">
         <div className="container mx-auto max-w-xl sm:max-w-4xl">
           <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 text-white leading-tight">
             Clarity in Complexity.<br />
@@ -1298,6 +1346,12 @@ const Index = () => {
             View Research
             <ArrowDown className="ml-2 h-5 w-5" />
           </Button>
+          {/* TradingView Mini Charts Section */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-between mt-6">
+            <TradingViewMiniChart symbol="BSE:SENSEX" />
+            <TradingViewMiniChart symbol="NSE:NIFTY" />
+            <TradingViewMiniChart symbol="COINBASE:BITM2025" />
+          </div>
         </div>
       </section>
 
@@ -1415,6 +1469,35 @@ const Index = () => {
           </div>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+};
+
+// Add TradingViewMiniChart component for each widget
+const TradingViewMiniChart: React.FC<{ symbol: string }> = ({ symbol }) => {
+  const ref = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (ref.current) ref.current.innerHTML = '';
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = true;
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
+    script.innerHTML = JSON.stringify({
+      symbol,
+      width: '100%',
+      height: 220,
+      locale: 'en',
+      dateRange: '12M',
+      colorTheme: 'dark',
+      isTransparent: false,
+      autosize: true,
+      largeChartUrl: ''
+    });
+    if (ref.current) ref.current.appendChild(script);
+  }, [symbol]);
+  return (
+    <div className="w-full max-w-xs flex-1 mx-auto">
+      <div ref={ref} className="w-full" />
     </div>
   );
 };
