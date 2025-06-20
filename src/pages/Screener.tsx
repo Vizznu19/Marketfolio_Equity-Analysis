@@ -31,6 +31,7 @@ const TradingViewFullScreener: React.FC = () => {
 export default function Screener() {
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
   const toolsDropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownCloseTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -58,21 +59,44 @@ export default function Screener() {
             <Link to="/#reports-section" className="text-gray-300 hover:text-white transition-colors cursor-pointer text-sm sm:text-base px-4 py-2 rounded-md">
               Analysis
             </Link>
-            <div className="relative" ref={toolsDropdownRef}>
+            <div
+              className="relative"
+              ref={toolsDropdownRef}
+              onMouseEnter={() => {
+                if (dropdownCloseTimeout.current) {
+                  clearTimeout(dropdownCloseTimeout.current);
+                  dropdownCloseTimeout.current = null;
+                }
+                setToolsDropdownOpen(true);
+              }}
+              onMouseLeave={() => {
+                dropdownCloseTimeout.current = setTimeout(() => {
+                  setToolsDropdownOpen(false);
+                }, 300);
+              }}
+            >
               <button
-                onClick={() => setToolsDropdownOpen((open) => !open)}
                 className="text-gray-300 hover:text-white transition-colors cursor-pointer text-sm sm:text-base px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                tabIndex={0}
+                type="button"
               >
                 Tools
               </button>
               {toolsDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-36 bg-gray-900 border border-gray-700 rounded-md shadow-lg z-50">
+                <div
+                  className="absolute left-0 mt-2 w-36 bg-gray-900 border border-gray-700 rounded-md shadow-lg z-50"
+                >
                   <Link
                     to="/screener"
                     className="block px-4 py-2 text-gray-300 hover:bg-blue-500 hover:text-white rounded-md transition-colors text-sm"
-                    onClick={() => setToolsDropdownOpen(false)}
                   >
                     Screener
+                  </Link>
+                  <Link
+                    to="/news"
+                    className="block px-4 py-2 text-gray-300 hover:bg-blue-500 hover:text-white rounded-md transition-colors text-sm"
+                  >
+                    News
                   </Link>
                 </div>
               )}
